@@ -1,0 +1,37 @@
+name: Testproject
+on: [push,workflow_dispatch]
+
+jobs:
+    Testjob:
+       runs-on: ubuntu-latest
+       steps:
+         - name: Get the code
+           uses: actions/checkout@v3
+           with:
+                 ${{ github.repository }}
+         - name: Install Node js 
+           uses: actions/setup-node@v3
+           with:
+                  node-version: 17
+         - name: Installing Dependencies
+           run: npm ci
+         - name: Perform test
+           run:  npm test
+    Deploymentjob:
+         needs: Testjob
+         runs-on: ubuntu-latest
+         steps:
+            - name: Get the code
+              uses: actions/checkout@v3
+            - name: Install Node 
+              uses: actions/setup-node@v3
+              with:
+                    node-version: 17
+            - name: Intsalling Dependencies
+              run: npm ci 
+            - name: building the code
+              run: npm run build
+            - name: Deployment
+              run: echo " Deploying......"
+         
+              
